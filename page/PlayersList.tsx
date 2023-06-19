@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { View, FlatList, Text, Button } from 'react-native';
 import { Players } from '../interfaces';
 import { StyleSheet } from 'react-native';
-import { SearchBar } from 'react-native-screens';
+import SearchBar  from '../component/SearchBar'
 
 function GetPlayers({navigation}) {
   const [playersData, setPlayersData] = useState<Players[]>([]);
@@ -23,30 +23,33 @@ function GetPlayers({navigation}) {
 
   return (
     <View>
-      <SearchBar/>
-      <FlatList
-        data= {playersData}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => {
-          return (
-            <View>
-              
-              <View style={styles.playersCard}>
-                <View style={styles.playersName}>
-                  <Text>{item.lastName}</Text>
-                  <Text>{item.firstName}</Text>
+      <View style={styles.searchBarContainer}>
+        <SearchBar/>
+      </View>
+      <View>
+        <FlatList
+          data= {playersData}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => {
+            return (
+              <View>
+                <View style={styles.playersCard}>
+                  <View style={styles.playersName}>
+                    <Text>{item.lastName}</Text>
+                    <Text>{item.firstName}</Text>
+                  </View>
+                  <Button
+                  title='Voir les Stats'
+                  onPress={() => handlePress(item)}
+                  color="purple"
+                  accessibilityLabel="Voir le détail de chaque joueurs"
+                />
                 </View>
-                <Button
-                title='Voir les Stats'
-                onPress={() => handlePress(item)}
-                color="purple"
-                accessibilityLabel="Voir le détail de chaque joueurs"
-              />
               </View>
-            </View>
-          )
-        }}
-      />
+            )
+          }}
+        />
+      </View>
     </View>
   )
 }
@@ -69,6 +72,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     columnGap:8
   },
+  searchBarContainer:{
+    width:'100%',
+    margin:0,
+  }
 });
 
 export default GetPlayers
