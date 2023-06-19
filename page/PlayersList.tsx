@@ -3,13 +3,12 @@ import { useState, useEffect } from 'react';
 import { View, FlatList, Text, Button } from 'react-native';
 import { Players } from '../interfaces';
 import { StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SearchBar } from 'react-native-screens';
 
 function GetPlayers({navigation}) {
   const [playersData, setPlayersData] = useState<Players[]>([]);
 
-  console.log('players data: ', playersData)
+  console.log(playersData.map((item) => item.id))
 
   useEffect(()=> {
     axios.get<Players[]>('https://api.mpg.football/api/data/championship-players-pool/1')
@@ -18,15 +17,20 @@ function GetPlayers({navigation}) {
     })
   }, [])
 
+  const handlePress = (player) => {
+    navigation.navigate('Details du joueur', { player })
+  }
 
   return (
     <View>
+      <SearchBar/>
       <FlatList
         data= {playersData}
         keyExtractor={item => item.id}
         renderItem={({item}) => {
           return (
             <View>
+              
               <View style={styles.playersCard}>
                 <View style={styles.playersName}>
                   <Text>{item.lastName}</Text>
@@ -34,7 +38,7 @@ function GetPlayers({navigation}) {
                 </View>
                 <Button
                 title='Voir les Stats'
-                onPress={() => navigation.navigate('Details')}
+                onPress={() => handlePress(item)}
                 color="purple"
                 accessibilityLabel="Voir le détail de chaque joueurs"
               />

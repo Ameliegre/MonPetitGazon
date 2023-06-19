@@ -130,9 +130,9 @@ type ChampionshipsPlayerDetails = {
 }
 
 export interface PlayersDetails {
-    id: string;
-    type: string;
-    championships: ChampionshipsPlayerDetails;
-    position: number;
+    id: string,
+    type: string,
+    championships: ChampionshipsPlayerDetails,
+    position: number,
     ultraposition: number
 }
