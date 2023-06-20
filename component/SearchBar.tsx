@@ -11,10 +11,9 @@ function SearchBar({playersData, setFilteredPlayersData, positions}) {
     useEffect(() => {
         console.log(selected)
 
-        let tmp = playersData
-
+        let result = playersData
         if (selected.length > 0) {
-            tmp = tmp?.filter(player => {
+            result = result?.filter(player => {
                 return selected.find(elt => {
                     return elt === player.ultraPosition
                 } )
@@ -25,15 +24,14 @@ function SearchBar({playersData, setFilteredPlayersData, positions}) {
         
         if (text.length > 0) {
             console.log('text2', text)
-            tmp = tmp?.filter(player => {
+            result = result?.filter(player => {
                     console.log('lastname', player.lastName, 'firstname', player.firstName, 'text', text)
                     return player.lastName && player.lastName.includes(text) || 
                     player.firstName && player.firstName.includes(text)
                 }    
             );
         } 
-
-        setFilteredPlayersData(tmp)
+        setFilteredPlayersData(result)
 
     }, [text, selected])
 
