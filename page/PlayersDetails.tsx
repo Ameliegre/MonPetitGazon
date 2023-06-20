@@ -6,20 +6,21 @@ import { StyleSheet } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 
 type ParamList = {
-    'Details du joueur': { player: Players };
+    'Details du joueur': { player: Players, positions };
   };
   
 type RouteParams = RouteProp<ParamList, 'Details du joueur'>;
 
 function GetPlayersDetails() {
     const route = useRoute<RouteParams>();
-    const { player } = route.params;
+    const { player, positions } = route.params;
     const [playerStat, setPlayerStat] = useState<PlayersDetails[]>([]);
 
     useEffect(()=> {
       axios.get<PlayersDetails[]>(`https://api.mpg.football/api/data/championship-player-stats/${player.id}/2022`)
       .then((response: AxiosResponse) => {
-        setPlayerStat(response.data)
+        console.log(response.data.championships)
+        setPlayerStat(response.data.championships)
       })
     }, [player])
 
@@ -31,40 +32,34 @@ function GetPlayersDetails() {
         )
     }
 
+    const positionPlayer = positions.find((item: { key: number; }) => item.key === player.ultraPosition)
+
     return (
         <View style={styles.detailsCard}>
           <View style={styles.namePlayerCard}>
             <Text style={styles.namePlayer}>{player.firstName}</Text>
             <Text style={styles.namePlayer}>{player.lastName}</Text>
             <Text style={styles.namePlayer}>-</Text>
-            <Text style={styles.namePlayer}>{player.ultraPosition}</Text>
+            <Text style={styles.namePlayer}>{positionPlayer.value}</Text>
           </View>
-          <View style={styles.statsCard} >
-            <Text style={styles.Title}>Stats</Text>
+          <View style={styles.statsCard}>
+            <Text style={styles.Title}>Fiche joueur</Text>
             <View style={styles.statsDetails}>
               <View style={styles.statsStyle}>
-                <Text>Note</Text>
-                <Text>{player.stats.averageRating.toFixed(2)}</Text>
+                <Text>Titulaire</Text>
+                <Text>{player.stats.totalStartedMatches}</Text>
               </View>
               <View style={styles.statsStyle}>
                 <Text>Buts</Text>
                 <Text>{player.stats.totalGoals}</Text>
               </View>
               <View style={styles.statsStyle}>
-                <Text>Matches</Text>
-                <Text>{player.stats.totalMatches}</Text>
-              </View>
-              <View style={styles.statsStyle}>
-                <Text>Matches joués</Text>
+                <Text>Total match joués</Text>
                 <Text>{player.stats.totalPlayedMatches}</Text>
               </View>
               <View style={styles.statsStyle}>
-                <Text>Titulaire</Text>
-                <Text>{player.stats.totalStartedMatches}</Text>
-              </View>
-              <View style={styles.statsStyle}>
-                <Text>Position</Text>
-                <Text>{player.position}</Text>
+                <Text>Cote</Text>
+                <Text>{player.quotation}</Text>
               </View>
             </View>
           </View>
@@ -88,10 +83,13 @@ const styles = StyleSheet.create({
     namePlayerCard:{
       display:'flex',
       flexDirection:'row',
+      flexWrap:'wrap',
       columnGap:10
     },
     statsCard:{
-      width:'100%'
+      width:'100%',
+      display:'flex',
+      alignItems:'center'
     },
     statsDetails: {
       borderWidth: 1,
@@ -108,7 +106,7 @@ const styles = StyleSheet.create({
     },
     namePlayer: {
       fontWeight:'bold',
-      fontSize:30
+      fontSize:25,
     },
     Title: {
       fontSize:24,

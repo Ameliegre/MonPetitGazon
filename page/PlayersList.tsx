@@ -5,9 +5,23 @@ import { Players } from '../interfaces';
 import { StyleSheet } from 'react-native';
 import SearchBar  from '../component/SearchBar'
 
+interface Position {
+  key: number;
+  value: string;
+}
+
 function GetPlayers({navigation}) {
   const [playersData, setPlayersData] = useState<Players[]>([]);
   const [filteredPlayersData, setFilteredPlayersData] = useState<Players[]>([]);
+
+  const positions:Position[] = [
+    {key:10, value:'Gardien'},
+    {key:20, value:'Defenseur'},
+    {key:21, value:'Lateral'},
+    {key:30, value:'Milieu défensif'},
+    {key:31, value:'Milieu offensif'},
+    {key:40, value:'Attaquant'},
+]
 
   useEffect(()=> {
     axios.get<Players[]>('https://api.mpg.football/api/data/championship-players-pool/1')
@@ -18,13 +32,13 @@ function GetPlayers({navigation}) {
   }, [])
 
   const handlePress = (player: Players) => {
-    navigation.navigate('Details du joueur', { player })
+    navigation.navigate('Details du joueur', { player, positions})
   }
 
   return (
     <View>
       <View style={styles.searchBarContainer}>
-        <SearchBar playersData={playersData} setFilteredPlayersData={setFilteredPlayersData}/>
+        <SearchBar positions={positions} playersData={playersData} setFilteredPlayersData={setFilteredPlayersData}/>
       </View>
       <View>
         <FlatList

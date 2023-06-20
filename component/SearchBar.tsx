@@ -4,18 +4,9 @@ import {TextInput} from 'react-native';
 import { StyleSheet } from 'react-native';
 import { MultipleSelectList } from 'react-native-dropdown-select-list'
 
-function SearchBar({playersData, setFilteredPlayersData}) {
+function SearchBar({playersData, setFilteredPlayersData, positions}) {
     const [selected, setSelected] = useState([]);
     const [text, onChangeText] = useState('')
-
-    const position = [
-        {key:10, value:'Gardien'},
-        {key:20, value:'Defenseur'},
-        {key:21, value:'Lateral'},
-        {key:30, value:'Milieu défensif'},
-        {key:31, value:'Milieu offensif'},
-        {key:40, value:'Attaquant'},
-    ]
 
     useEffect(() => {
         console.log(selected)
@@ -40,7 +31,7 @@ function SearchBar({playersData, setFilteredPlayersData}) {
                     player.firstName && player.firstName.includes(text)
                 }    
             );
-          } 
+        } 
 
         setFilteredPlayersData(tmp)
 
@@ -59,7 +50,7 @@ function SearchBar({playersData, setFilteredPlayersData}) {
                 dropdownStyles={{backgroundColor:'white', borderColor:'rgb(216, 218, 232)'}}
                 placeholder='Sélectionner position'
                 setSelected={setSelected} 
-                data={position} 
+                data={positions} 
                 save="key"
                 label="Position"
                 maxHeight={200}
