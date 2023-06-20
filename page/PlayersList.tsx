@@ -7,28 +7,28 @@ import SearchBar  from '../component/SearchBar'
 
 function GetPlayers({navigation}) {
   const [playersData, setPlayersData] = useState<Players[]>([]);
-
-  console.log(playersData.map((item) => item.id))
+  const [filteredPlayersData, setFilteredPlayersData] = useState<Players[]>([]);
 
   useEffect(()=> {
     axios.get<Players[]>('https://api.mpg.football/api/data/championship-players-pool/1')
     .then((response: AxiosResponse) => {
       setPlayersData(response.data.poolPlayers)
+      setFilteredPlayersData(response.data.poolPlayers)
     })
   }, [])
 
-  const handlePress = (player) => {
+  const handlePress = (player: Players) => {
     navigation.navigate('Details du joueur', { player })
   }
 
   return (
     <View>
       <View style={styles.searchBarContainer}>
-        <SearchBar/>
+        <SearchBar playersData={playersData} setFilteredPlayersData={setFilteredPlayersData}/>
       </View>
       <View>
         <FlatList
-          data= {playersData}
+          data= {filteredPlayersData}
           keyExtractor={item => item.id}
           renderItem={({item}) => {
             return (

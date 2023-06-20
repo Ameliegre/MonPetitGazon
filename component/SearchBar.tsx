@@ -4,18 +4,33 @@ import {TextInput} from 'react-native';
 import { StyleSheet } from 'react-native';
 import { MultipleSelectList } from 'react-native-dropdown-select-list'
 
-function SearchBar() {
+function SearchBar({playersData, setFilteredPlayersData}) {
     const [text, onChangeText] = useState('');
-    const [selected, setSelected] = useState('');
+    const [selected, setSelected] = useState([]);
 
     const position = [
-        {key:'G', value:'Gardien'},
-        {key:'D', value:'Defenseur'},
-        {key:'L', value:'Lateral'},
-        {key:'MD', value:'Milieu défensif'},
-        {key:'MO', value:'Milieu Offensif'},
-        {key:'A', value:'Attaquant'},
+        {key:10, value:'Gardien'},
+        {key:20, value:'Defenseur'},
+        {key:21, value:'Lateral'},
+        {key:30, value:'Milieu défensif'},
+        {key:31, value:'Milieu offensif'},
+        {key:40, value:'Attaquant'},
     ]
+
+    function handleSelect(){
+        if (selected.length > 0) {
+            const ultrapositionSelected = playersData?.filter(player => {
+                return selected.find(elt => {
+                    return elt === player.ultraPosition
+                } )
+            } )
+            setFilteredPlayersData(ultrapositionSelected);
+        } else {
+            setFilteredPlayersData(playersData);
+        }
+        console.log( selected)
+    }
+
 
     return (
         <View style={styles.searchContainer}>
@@ -29,10 +44,10 @@ function SearchBar() {
                 boxStyles={{backgroundColor:'white', borderColor:'rgb(216, 218, 232)'}}
                 dropdownStyles={{backgroundColor:'white', borderColor:'rgb(216, 218, 232)'}}
                 placeholder='Sélectionner position'
-                setSelected={(position) => setSelected(position)} 
+                setSelected={setSelected} 
                 data={position} 
-                save="value"
-                onSelect={() => alert(selected)} 
+                save="key"
+                onSelect={handleSelect} 
                 label="Position"
                 maxHeight={200}
                 dropdownItemStyles={{marginHorizontal:20}}

@@ -16,14 +16,9 @@ function GetPlayersDetails() {
     const { player } = route.params;
     const [playerStat, setPlayerStat] = useState<PlayersDetails[]>([]);
 
-    console.log(player)
-
-    console.log('player details: ', playerStat)
-
     useEffect(()=> {
       axios.get<PlayersDetails[]>(`https://api.mpg.football/api/data/championship-player-stats/${player.id}/2022`)
       .then((response: AxiosResponse) => {
-        console.log('iiiicii', response)
         setPlayerStat(response.data)
       })
     }, [player])
