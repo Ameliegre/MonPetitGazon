@@ -21,7 +21,7 @@ function GetPlayers({navigation}) {
     {key:30, value:'Milieu défensif'},
     {key:31, value:'Milieu offensif'},
     {key:40, value:'Attaquant'},
-]
+  ]
 
   useEffect(()=> {
     axios.get<Players[]>('https://api.mpg.football/api/data/championship-players-pool/1')
