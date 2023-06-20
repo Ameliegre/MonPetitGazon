@@ -1,12 +1,12 @@
 import { View} from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {TextInput} from 'react-native';
 import { StyleSheet } from 'react-native';
 import { MultipleSelectList } from 'react-native-dropdown-select-list'
 
 function SearchBar({playersData, setFilteredPlayersData}) {
-    const [text, onChangeText] = useState('');
     const [selected, setSelected] = useState([]);
+    const [text, onChangeText] = useState('')
 
     const position = [
         {key:10, value:'Gardien'},
@@ -17,20 +17,34 @@ function SearchBar({playersData, setFilteredPlayersData}) {
         {key:40, value:'Attaquant'},
     ]
 
-    function handleSelect(){
+    useEffect(() => {
+        console.log(selected)
+
+        let tmp = playersData
+
         if (selected.length > 0) {
-            const ultrapositionSelected = playersData?.filter(player => {
+            tmp = tmp?.filter(player => {
                 return selected.find(elt => {
                     return elt === player.ultraPosition
                 } )
             } )
-            setFilteredPlayersData(ultrapositionSelected);
-        } else {
-            setFilteredPlayersData(playersData);
-        }
-        console.log( selected)
-    }
+        } 
 
+        console.log('text', text.length)
+        
+        if (text.length > 0) {
+            console.log('text2', text)
+            tmp = tmp?.filter(player => {
+                    console.log('lastname', player.lastName, 'firstname', player.firstName, 'text', text)
+                    return player.lastName && player.lastName.includes(text) || 
+                    player.firstName && player.firstName.includes(text)
+                }    
+            );
+          } 
+
+        setFilteredPlayersData(tmp)
+
+    }, [text, selected])
 
     return (
         <View style={styles.searchContainer}>
@@ -47,7 +61,6 @@ function SearchBar({playersData, setFilteredPlayersData}) {
                 setSelected={setSelected} 
                 data={position} 
                 save="key"
-                onSelect={handleSelect} 
                 label="Position"
                 maxHeight={200}
                 dropdownItemStyles={{marginHorizontal:20}}

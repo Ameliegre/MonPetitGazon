@@ -45,7 +45,7 @@ export interface Players {
     firstName: string;
     lastName: string;
     position: number;
-    ultraposition: number;
+    ultraPosition: number;
     quotation: number;
     clubId: string;
     stats: Stats & {
@@ -134,5 +134,5 @@ export interface PlayersDetails {
     type: string,
     championships: ChampionshipsPlayerDetails,
     position: number,
-    ultraposition: number
+    ultraPosition: number
 }
